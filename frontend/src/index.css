@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Make tabular nums default for monospace numerals */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Custom broadsheet hairline divider */
+.broadsheet-rule {
+  border-color: #DDD8CE;
+}
+
+.dark .broadsheet-rule {
+  border-color: #252B35;
+}
+
+/* Financial Ledger column layout */
+.ledger-border {
+  border: 1px solid #DDD8CE;
+}
+
+.dark .ledger-border {
+  border: 1px solid #252B35;
+}
+
+/* Custom scrollbars that match broadsheet paper */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #DDD8CE;
+  border-radius: 2px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #252B35;
+}
