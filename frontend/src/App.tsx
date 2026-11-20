@@ -390,8 +390,8 @@ export function App() {
     }
   };
 
-  // Skeleton Loader while auth initializes
-  if (isLoadingAuth) {
+  // Skeleton Loader only when waiting on protected dashboard route
+  if (isLoadingAuth && currentPage === 'dashboard') {
     return (
       <div className="min-h-screen bg-broadsheet-cream text-broadsheet-ink dark:bg-broadsheet-dark-bg dark:text-broadsheet-dark-text flex flex-col font-sans transition-colors duration-200">
         <div className="border-b border-broadsheet-rule dark:border-broadsheet-dark-rule py-4 px-4 sm:px-8 max-w-6xl mx-auto w-full flex items-center justify-between">
@@ -516,6 +516,8 @@ export function App() {
           <FrontPage
             onOpenAuth={handleOpenAuth}
             onNavigate={handleNavigate}
+            user={currentUser}
+            isLoadingAuth={isLoadingAuth}
           />
         )}
       </main>

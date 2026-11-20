@@ -36,13 +36,28 @@ export const Navbar: React.FC<NavbarProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Compute initials from user (or "D" for Demo)
+  // Compute initials from user (or "Demo" for Demo)
   const getInitials = (u: { email: string; name: string; isDemo?: boolean }) => {
-    if (u.isDemo) return 'D';
-    if (!u.name) return 'U';
-    const parts = u.name.trim().split(/\s+/);
-    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    if (u.isDemo) return 'Demo';
+    const trimmedName = u.name ? u.name.trim() : '';
+    if (trimmedName) {
+      const parts = trimmedName.split(/\s+/);
+      if (parts.length > 1) {
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      }
+      if (parts[0].length >= 2) {
+        return parts[0].slice(0, 2).toUpperCase();
+      }
+      return parts[0].toUpperCase();
+    }
+    if (u.email) {
+      const beforeAt = u.email.split('@')[0] || '';
+      if (beforeAt.length >= 2) {
+        return beforeAt.slice(0, 2).toUpperCase();
+      }
+      return beforeAt.toUpperCase() || 'U';
+    }
+    return 'U';
   };
 
   return (
@@ -101,11 +116,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* User Auth or Initials Menu */}
           {user ? (
             <div className="relative" ref={menuRef}>
-              {/* Initials Circle Button */}
+              {/* Initials / Demo Circle Button */}
               <button
                 type="button"
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="w-8 h-8 rounded-full border border-broadsheet-rule dark:border-broadsheet-dark-rule bg-broadsheet-paper dark:bg-broadsheet-dark-paper hover:border-broadsheet-terracotta dark:hover:border-broadsheet-dark-brass flex items-center justify-center font-mono text-xs font-semibold text-broadsheet-ink dark:text-broadsheet-dark-text transition-colors shadow-sm focus:outline-none"
+                className={`h-8 rounded-full border border-broadsheet-rule dark:border-broadsheet-dark-rule bg-broadsheet-paper dark:bg-broadsheet-dark-paper hover:border-broadsheet-terracotta dark:hover:border-broadsheet-dark-brass flex items-center justify-center font-mono text-xs font-semibold text-broadsheet-ink dark:text-broadsheet-dark-text transition-colors shadow-sm focus:outline-none ${
+                  user.isDemo ? 'px-2.5 min-w-[2.25rem]' : 'w-8'
+                }`}
                 title={user.isDemo ? 'Demo Account' : user.name}
                 aria-label="User account menu"
               >

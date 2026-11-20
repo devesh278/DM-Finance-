@@ -4,9 +4,16 @@ import { Footer } from './Footer';
 interface FrontPageProps {
   onOpenAuth: (mode?: 'signin' | 'signup') => void;
   onNavigate: (page: 'landing' | 'dashboard' | 'optimizer' | 'stocks') => void;
+  user?: { email: string; name: string; isDemo?: boolean } | null;
+  isLoadingAuth?: boolean;
 }
 
-export const FrontPage: React.FC<FrontPageProps> = ({ onOpenAuth, onNavigate }) => {
+export const FrontPage: React.FC<FrontPageProps> = ({
+  onOpenAuth,
+  onNavigate,
+  user,
+  isLoadingAuth = false,
+}) => {
   return (
     <div className="animate-fade-in font-sans">
       
@@ -29,13 +36,30 @@ export const FrontPage: React.FC<FrontPageProps> = ({ onOpenAuth, onNavigate }) 
             </p>
 
             <div className="pt-2 flex flex-wrap items-center gap-5">
-              <button
-                type="button"
-                onClick={() => onOpenAuth('signup')}
-                className="px-6 py-3 bg-broadsheet-terracotta hover:bg-broadsheet-terracotta-hover dark:bg-broadsheet-dark-brass dark:hover:bg-broadsheet-dark-brass-hover text-white dark:text-black font-sans font-medium text-sm transition-colors shadow-sm"
-              >
-                Sign up free
-              </button>
+              {isLoadingAuth && !user ? (
+                <div
+                  className="px-6 py-3 text-sm font-sans font-medium invisible select-none pointer-events-none"
+                  aria-hidden="true"
+                >
+                  Go to dashboard
+                </div>
+              ) : user ? (
+                <button
+                  type="button"
+                  onClick={() => onNavigate('dashboard')}
+                  className="px-6 py-3 bg-broadsheet-terracotta hover:bg-broadsheet-terracotta-hover dark:bg-broadsheet-dark-brass dark:hover:bg-broadsheet-dark-brass-hover text-white dark:text-black font-sans font-medium text-sm transition-colors shadow-sm"
+                >
+                  Go to dashboard
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => onOpenAuth('signup')}
+                  className="px-6 py-3 bg-broadsheet-terracotta hover:bg-broadsheet-terracotta-hover dark:bg-broadsheet-dark-brass dark:hover:bg-broadsheet-dark-brass-hover text-white dark:text-black font-sans font-medium text-sm transition-colors shadow-sm"
+                >
+                  Sign up free
+                </button>
+              )}
 
               <a
                 href="#how-it-works"
@@ -144,7 +168,7 @@ export const FrontPage: React.FC<FrontPageProps> = ({ onOpenAuth, onNavigate }) 
             onClick={() => onNavigate('optimizer')}
             className="text-sm font-sans font-medium text-broadsheet-terracotta dark:text-broadsheet-dark-brass hover:underline flex items-center space-x-1"
           >
-            <span>Try the optimizer</span>
+            <span>{user ? 'Open the optimizer' : 'Try the optimizer'}</span>
             <span>→</span>
           </button>
         </div>
